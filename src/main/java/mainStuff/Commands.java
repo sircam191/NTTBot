@@ -85,6 +85,7 @@ public class Commands extends ListenerAdapter {
             event.getChannel().sendMessage(eb.build()).queue(m -> {
                 m.addReaction(nttEmote).queue();
             });
+        }
 
             //SHUTDOWN
             if (args[0].equalsIgnoreCase(Main.prefix + "shutdown")) {
@@ -170,10 +171,6 @@ public class Commands extends ListenerAdapter {
                 emb.setColor(Color.RED);
                 emb.setThumbnail("https://media.giphy.com/media/5nxHFn5888nrq/giphy.gif");
                 event.getChannel().sendMessage(emb.build()).queue();
-
             }
-
         }
-
-
-    }}
+    }
