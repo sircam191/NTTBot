@@ -21,7 +21,7 @@ public class Main {
         jda.getPresence().setGame(Game.listening("-Not The TeamSpeak-"));
         jda.addEventListener(new Commands());
         jda.addEventListener(new UserJoinEvent());
-       // jda.addEventListener(new mainStuff.SayCommand());
+        jda.addEventListener(new mainStuff.SayCommand());
         jda.addEventListener(new UserBanEvent());
         jda.addEventListener(new AudioCommands());
         jda.addEventListener(new PlayCommand());
