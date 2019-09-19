@@ -20,10 +20,14 @@ public class PlayCommand extends ListenerAdapter {
         String songSearch = "";
 
 
-
-        if (input.length() > 6) {
+        //TODO check if this works, upload to live server
+        if (input.length() > 6 && args[0].startsWith("?play")) {
             songSearch = event.getMessage().getContentDisplay().substring(5);
         }
+        else if(args[0].startsWith("?p")) {
+            songSearch = event.getMessage().getContentDisplay().substring(2);
+        }
+        //TODO Do I need this? (below else statement)
         else {
             songSearch = event.getMessage().getContentDisplay();
         }
@@ -51,19 +55,23 @@ public class PlayCommand extends ListenerAdapter {
                     event.getChannel().sendMessage("You gotta tell me what to play loser").queue();
                 }
 
-                if (!isUrl(input) && !input.isEmpty()) {
+                if (!input.isEmpty()) {
 
                     try {
-                        event.getChannel().sendMessage("Joining: ``" + event.getMember().getVoiceState().getChannel().getName() + "``").queue();
+
+                        if (event.getMember().getVoiceState().getChannel() != audioManager.getConnectedChannel()) {
+                            event.getChannel().sendMessage("> Joining: ``" + event.getMember().getVoiceState().getChannel().getName() + "``").queue();
+                        }
                         audioManager.openAudioConnection(event.getMember().getVoiceState().getChannel());
-                        event.getChannel().sendMessage("Searching YouTube For: ``" + songSearch + " ``").queue();
+
+                        event.getChannel().sendMessage("> Searching YouTube For: ``" + songSearch + "``").queue();
                         playerManager.loadAndPlay(event.getChannel(), "ytsearch:" + songSearch);
                     } catch (Exception e) {
                         event.getChannel().sendMessage("Umm I can't join your channel if your not in a channel").queue();
                     }
                 }
-
-                if (!input.isEmpty() && isUrl(input)) {
+                /*
+                if (!input.isEmpty() && isUrl(songSearch)) {
                     playerManager.loadAndPlay(event.getChannel(), input);
                     try {
                         event.getChannel().sendMessage("Joining: ``" + event.getMember().getVoiceState().getChannel().getName() + "``").queue();
@@ -72,6 +80,7 @@ public class PlayCommand extends ListenerAdapter {
                         event.getChannel().sendMessage("Umm I can't join your channel if your not in a channel").queue();
                     }
                 }
+            */
             }
             }
     }
