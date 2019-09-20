@@ -30,6 +30,7 @@ public class Main {
         jda.addEventListener(new QueueCommand());
         jda.addEventListener(new SkipCommand());
         jda.addEventListener(new NowPlayingCommand());
+        jda.addEventListener(new userLeaveVoiceEvent());
 
 
         /////////////////////////////////////////// time test thing
