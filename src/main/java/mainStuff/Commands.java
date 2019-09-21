@@ -206,8 +206,6 @@ public class Commands extends ListenerAdapter {
 
                     emb.setColor(taggedMember.getColor());
 
-                    //event.getChannel().sendMessage(rolesTagged).queue();
-
                     if(rolesTagged.contains("434983695288631297")) {
                         emb.setFooter(taggedMember.getEffectiveName() + " is a Admin", tagUser.getAvatarUrl());
                     }
