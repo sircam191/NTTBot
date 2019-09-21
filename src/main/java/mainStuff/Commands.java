@@ -171,6 +171,55 @@ public class Commands extends ListenerAdapter {
                 emb.setColor(Color.RED);
                 emb.setThumbnail("https://media.giphy.com/media/5nxHFn5888nrq/giphy.gif");
                 event.getChannel().sendMessage(emb.build()).queue();
+         
             }
-        }
+       //USER INFO
+            if (args[0].equalsIgnoreCase(Main.prefix + "userinfo")) {
+
+              try {
+                   User tagUser = event.getMessage().getMentionedUsers().get(0);
+                   Member taggedMember = event.getMessage().getMentionedMembers().get(0);
+                   EmbedBuilder emb = new EmbedBuilder();
+                   String joinDateClean = String.valueOf(taggedMember.getJoinDate().getMonth() + " " + String.valueOf(taggedMember.getJoinDate().getDayOfMonth()) + ", " + String.valueOf(taggedMember.getJoinDate().getYear()));
+
+                //Adds user roles as mentions into String
+                int i = taggedMember.getRoles().size();
+                String rolesTagged = "";
+                while( i > 0) {
+                    rolesTagged += taggedMember.getRoles().get(i -1).getAsMention();
+                    rolesTagged += " ";
+                    i--;
+                }
+                //////
+
+                emb.setThumbnail(tagUser.getAvatarUrl());
+                emb.setTitle("**User Info**");
+                emb.addField("Info for " + taggedMember.getEffectiveName() + "#" + tagUser.getDiscriminator(),
+                           "**User ID:** " + tagUser.getId() + "\n" +
+                           "**Nickname:** " + tagUser.getName() + "\n" +
+                            "**Join Date:** " + joinDateClean + "\n" +
+                            "**Status:** " + taggedMember.getOnlineStatus().toString() + "\n" +
+                            "**Tag: ** " + taggedMember.getAsMention() + "\n" +
+                            "**Number of Roles:** " + taggedMember.getRoles().size() + "\n" +
+                              "**Roles:** " + rolesTagged
+                           , false);
+
+                    emb.setColor(taggedMember.getColor());
+
+                    //event.getChannel().sendMessage(rolesTagged).queue();
+
+                    if(rolesTagged.contains("434983695288631297")) {
+                        emb.setFooter(taggedMember.getEffectiveName() + " is a Admin", tagUser.getAvatarUrl());
+                    }
+                    else {
+                        emb.setFooter(taggedMember.getEffectiveName() + " is Not a Admin", tagUser.getAvatarUrl());
+                    }
+                    
+                   event.getChannel().sendMessage(emb.build()).queue();
+
+              } catch (Exception e) {
+                    event.getChannel().sendMessage("Tag the member you want me to get info for.").queue();
+              }
+            }
+    }
     }
