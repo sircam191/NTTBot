@@ -1,5 +1,4 @@
 package mainStuff;
-//TODO Add this file to server
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Emote;
