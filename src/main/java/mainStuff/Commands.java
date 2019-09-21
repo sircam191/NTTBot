@@ -3,7 +3,7 @@ package mainStuff;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -30,8 +30,7 @@ public class Commands extends ListenerAdapter {
 
         //PING
         if (args[0].equalsIgnoreCase(Main.prefix + "ping")) {
-            event.getChannel().sendMessage("Pong!").queue();
-            event.getChannel().sendMessage("Ping: " + Long.toString(jda.getPing()) + "ms").queue();
+            event.getChannel().sendMessage("Pong!" + "\n> WebSocket Latency: " + Long.toString(jda.getPing()) + "ms").queue();
         }
 
         //HELP or COMMANDS
@@ -47,6 +46,7 @@ public class Commands extends ListenerAdapter {
                     "``?roll`` - Rolls 2 dice.\n" +
                     "``?poll <your question>`` - Turns your question into a poll\n" +
                     "``?say <#text-channel> <Message>`` - Bot says your message in the tagged channel\n" +
+                    "``?userinfo <@user>`` - Get the stats on a user\n" +
                     "``?about`` - Bot Info.\n", false);
 
             embed.addField("Music Commands:", "``?play <Song name or Link>`` - Plays song.\n" +
@@ -170,9 +170,10 @@ public class Commands extends ListenerAdapter {
                 emb.setColor(Color.RED);
                 emb.setThumbnail("https://media.giphy.com/media/5nxHFn5888nrq/giphy.gif");
                 event.getChannel().sendMessage(emb.build()).queue();
-         
+
             }
-       //USER INFO
+
+            //USER INFO
             if (args[0].equalsIgnoreCase(Main.prefix + "userinfo")) {
 
               try {
@@ -205,18 +206,21 @@ public class Commands extends ListenerAdapter {
 
                     emb.setColor(taggedMember.getColor());
 
+
                     if(rolesTagged.contains("434983695288631297")) {
                         emb.setFooter(taggedMember.getEffectiveName() + " is a Admin", tagUser.getAvatarUrl());
                     }
                     else {
                         emb.setFooter(taggedMember.getEffectiveName() + " is Not a Admin", tagUser.getAvatarUrl());
                     }
-                    
                    event.getChannel().sendMessage(emb.build()).queue();
 
               } catch (Exception e) {
                     event.getChannel().sendMessage("Tag the member you want me to get info for.").queue();
               }
+
             }
-    }
+
+        }
+
     }
