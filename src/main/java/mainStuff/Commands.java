@@ -41,7 +41,6 @@ public class Commands extends ListenerAdapter {
             embed.setColor(Color.CYAN);
             embed.addField("Basic Commands:", "``?ping`` - Bot responds with Pong!\n" +
                     "``?invite`` - Get invite to this server.\n" +
-                    "``?joindate <@user>`` - Get date that user joined the server.\n" +
                     "``?twitch <full twitch link>`` - Set the bots streaming link.\n" +
                     "``?roll`` - Rolls 2 dice.\n" +
                     "``?poll <your question>`` - Turns your question into a poll\n" +
