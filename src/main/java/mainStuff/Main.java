@@ -31,6 +31,7 @@ public class Main {
         jda.addEventListener(new SkipCommand());
         jda.addEventListener(new NowPlayingCommand());
         jda.addEventListener(new userLeaveVoiceEvent());
+        jda.addEventListener(new StickyCommand());
 
 
         /////////////////////////////////////////// time test thing
