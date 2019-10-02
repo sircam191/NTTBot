@@ -18,6 +18,19 @@ public class StickyCommand extends ListenerAdapter {
         Role StickTester = event.getGuild().getRoleById("625830975095570442");
 
 
+        ///////////////////////////
+
+        if(stickMessage != null) {
+            event.getChannel().getHistory().retrievePast(3).queue(m -> {
+                for (int i = 1; i < 3; i++) {
+                    if (m.get(i).getContentDisplay().contains(stickMessage)) {
+                        m.get(i).delete().queue();
+                    }
+                }
+            });
+        }
+        //////////////////////////////
+
         if (event.getMember() == nttBot && (event.getChannel() == stickChannel) && (event.getMessage().getContentDisplay().contains(stickMessage) )) {
             stickId = event.getMessageId();
         }
