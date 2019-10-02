@@ -24,7 +24,7 @@ public class PlayCommand extends ListenerAdapter {
         if (input.length() > 6 && args[0].startsWith("?play")) {
             songSearch = event.getMessage().getContentDisplay().substring(5);
         }
-        else if(args[0].startsWith("?p")) {
+        else if(args[0].toLowerCase().startsWith("?p")) {
             songSearch = event.getMessage().getContentDisplay().substring(2);
         }
         //TODO Do I need this? (below else statement)
@@ -56,16 +56,21 @@ public class PlayCommand extends ListenerAdapter {
                 }
 
                 if (!input.isEmpty()) {
-
                     try {
 
                         if (event.getMember().getVoiceState().getChannel() != audioManager.getConnectedChannel()) {
                             event.getChannel().sendMessage("> Joining: ``" + event.getMember().getVoiceState().getChannel().getName() + "``").queue();
                         }
                         audioManager.openAudioConnection(event.getMember().getVoiceState().getChannel());
-
                         event.getChannel().sendMessage("> Searching YouTube For: ``" + songSearch + "``").queue();
-                        playerManager.loadAndPlay(event.getChannel(), "ytsearch:" + songSearch);
+
+                        if(songSearch.startsWith("http")) {
+                            playerManager.loadAndPlay(event.getChannel(), songSearch);
+                        } else {
+                            playerManager.loadAndPlay(event.getChannel(), "ytsearch:" + songSearch);
+                        }
+
+
                     } catch (Exception e) {
                         event.getChannel().sendMessage("Umm I can't join your channel if your not in a channel").queue();
                     }
