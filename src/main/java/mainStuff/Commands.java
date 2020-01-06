@@ -10,8 +10,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Random;
 
 import static mainStuff.Main.jda;
 
@@ -43,9 +42,10 @@ public class Commands extends ListenerAdapter {
                     "``?invite`` - Get invite to this server.\n" +
                     "``?twitch <full twitch link>`` - Set the bots streaming link.\n" +
                     "``?roll`` - Rolls 2 dice.\n" +
-                    "``?poll <your question>`` - Turns your question into a poll\n" +
-                    "``?say <#text-channel> <Message>`` - Bot says your message in the tagged channel\n" +
-                    "``?userinfo <@user>`` - Get the stats on a user\n" +
+                    "``?poll <your question>`` - Turns your question into a poll.\n" +
+                    "``?say <#text-channel> <Message>`` - Bot says your message in the tagged channel (Admin only).\n" +
+                    "``?userinfo <@user>`` - Get the stats on a user.\n" +
+                    "``?ask <question>`` - The bot will answer your yes or no question.\n" +
                     "``?about`` - Bot Info.\n", false);
 
             embed.addField("Music Commands:", "``?play <Song name or Link>`` - Plays song.\n" +
@@ -128,97 +128,21 @@ public class Commands extends ListenerAdapter {
                 }
             }
 
-            //POLL
-            if (args[0].equalsIgnoreCase(Main.prefix + "poll")) {
-                String pollQ;
 
-                try {
-                    if (!args[1].isEmpty()) {
-                        pollQ = String.join(" ", args).substring(5);
+        if (args[0].equalsIgnoreCase(Main.prefix + "ask")) {
+            String answers[] = {"F**k No", "No one loves you, *", "It is possible", "100% yes", "Eat some a** then ask again", "I guess", "Hell naw", "Yessir", "naww dogg", "Ask me again...", "** my *** wee", "You will never know", "Yes", "No", "Prob nawt", "I think yes", "I think nope", "Impossible"};
+            //18 options
 
-                        event.getMessage().delete().queue();
-
-                        EmbedBuilder emb = new EmbedBuilder();
-
-                        emb.setColor(Color.BLACK);
-                        emb.setFooter("Poll by: " + event.getAuthor().getAsTag(), event.getAuthor().getAvatarUrl());
-
-                        emb.setTitle("**" + pollQ + "**");
-
-                        //adds reactions to poll message
-                        event.getChannel().sendMessage(emb.build()).queue(m -> {
-                            m.addReaction("\ud83d\udc4d").queue();
-                            m.addReaction("\uD83D\uDC4E").queue();
-                        });
-                    }
-                } catch (Exception e) {
-                    event.getChannel().sendMessage("You gotta tell me the thing u wanna poll").queue();
-                }
+            //if the used command but did not ask a question
+            if(event.getMessage().getContentRaw().length() <= 4) {
+                event.getChannel().sendMessage("You gotta ask my a question you dingle berry").queue();
+            } else {
+                Random rand = new Random();
+                int randomInt = rand.nextInt(17);
+                event.getChannel().sendMessage(answers[randomInt]).queue();
             }
 
-            //DICE ROLL
-            if (args[0].equalsIgnoreCase(Main.prefix + "dice") || args[0].equalsIgnoreCase(Main.prefix + "roll")) {
-                int dice1 = (int) (Math.random() * 6 + 1);
-                int dice2 = (int) (Math.random() * 6 + 1);
-                EmbedBuilder emb = new EmbedBuilder();
-
-                //emb.setTitle("Two Dice Rolled");
-                emb.addField("Dice 1:    **" + Integer.toString(dice1) + "**", "", false);
-                emb.addField("Dice 2:   **" + Integer.toString(dice2) + "**", "", false);
-                emb.addField("**TOTAL:**   **" + Integer.toString(dice1 + dice2) + "**", "", false);
-                emb.setColor(Color.RED);
-                emb.setThumbnail("https://media.giphy.com/media/5nxHFn5888nrq/giphy.gif");
-                event.getChannel().sendMessage(emb.build()).queue();
-
-            }
-
-            //USER INFO
-            if (args[0].equalsIgnoreCase(Main.prefix + "userinfo")) {
-
-              try {
-                   User tagUser = event.getMessage().getMentionedUsers().get(0);
-                   Member taggedMember = event.getMessage().getMentionedMembers().get(0);
-                   EmbedBuilder emb = new EmbedBuilder();
-                   String joinDateClean = String.valueOf(taggedMember.getJoinDate().getMonth() + " " + String.valueOf(taggedMember.getJoinDate().getDayOfMonth()) + ", " + String.valueOf(taggedMember.getJoinDate().getYear()));
-
-                //Adds user roles as mentions into String
-                int i = taggedMember.getRoles().size();
-                String rolesTagged = "";
-                while( i > 0) {
-                    rolesTagged += taggedMember.getRoles().get(i -1).getAsMention();
-                    rolesTagged += " ";
-                    i--;
-                }
-                //////
-
-                emb.setThumbnail(tagUser.getAvatarUrl());
-                emb.setTitle("**User Info**");
-                emb.addField("Info for " + taggedMember.getEffectiveName() + "#" + tagUser.getDiscriminator(),
-                           "**User ID:** " + tagUser.getId() + "\n" +
-                           "**Nickname:** " + tagUser.getName() + "\n" +
-                            "**Join Date:** " + joinDateClean + "\n" +
-                            "**Status:** " + taggedMember.getOnlineStatus().toString() + "\n" +
-                            "**Tag: ** " + taggedMember.getAsMention() + "\n" +
-                            "**Number of Roles:** " + taggedMember.getRoles().size() + "\n" +
-                              "**Roles:** " + rolesTagged
-                           , false);
-
-                    emb.setColor(taggedMember.getColor());
-
-
-                    if(rolesTagged.contains("434983695288631297")) {
-                        emb.setFooter(taggedMember.getEffectiveName() + " is a Admin", tagUser.getAvatarUrl());
-                    }
-                    else {
-                        emb.setFooter(taggedMember.getEffectiveName() + " is Not a Admin", tagUser.getAvatarUrl());
-                    }
-                   event.getChannel().sendMessage(emb.build()).queue();
-
-              } catch (Exception e) {
-                    event.getChannel().sendMessage("Tag the member you want me to get info for.").queue();
-              }
-
-            }
+        }
 
         }
 
